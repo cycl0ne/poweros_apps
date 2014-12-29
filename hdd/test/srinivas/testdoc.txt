@@ -1,0 +1,7 @@
+/**
+* --------------------- DOS FUNCTION VISIBLE
+**/
+
+/**
+* Locate an object and lock it.
+**/

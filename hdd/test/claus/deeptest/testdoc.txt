@@ -1,0 +1,37 @@
+
+/**
+* --------------------- DOS FUNCTION VISIBLE
+**/
+
+/**
+* Locate an object and lock it.
+**/
+
+pFSLock ext2_Locate(pGD gd, pFSLock lock, STRPTR str, INT32 mode) //pDosPacket dp)
+{
+//	pFSLock lock = (pFSLock)dp->dp_Arg1;
+//	STRPTR  str  = (STRPTR)dp->dp_Arg2;
+//	INT32   mode = (INT32)dp->dp_Arg3;
+	fs_node_t *node;
+#if 0	
+	KPrintF("Searching NodeList:\n");
+	pFSLock	locki;
+	
+	ForeachNode(&gd->gd_NodeList, node)
+	{
+		KPrintF("Found Nodenr: %d (%x), Name: [%s], %d\n", node->inode, node, node->name, node->count);	
+	}
+	ForeachNode(&gd->gd_LockList, locki)
+	{
+		node = (fs_node_t*) locki->rl_Lock.fl_Key;
+		KPrintF("Lock: %x N:%x,%s, %d \n", locki, node, node->name, node->count);	
+	}
+	KPrintF("----------Searching NodeList\n");
+#endif 
+//	gd->gd_FileErr = ERROR_ACTION_NOT_KNOWN;	
+//	return DOSIO_FALSE;
+	
+	node = LocateNode(gd, lock, str, TRUE);
+	if (!node) return NULL;
+	return GetLock(gd, node, mode);
+}

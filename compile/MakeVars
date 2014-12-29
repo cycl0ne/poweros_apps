@@ -1,0 +1,81 @@
+# common Makefile vars
+ifeq ($(VERBOSE),1)
+$(info "================common makevars start====================")
+endif
+
+# these variables maby me modified by architecture specific makevars
+CROSS :=
+
+CFLAGS := -O0 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -std=gnu99 -Wall -fno-common -Wextra
+ASFLAGS :=
+LDFLAGS :=
+
+LINKER_SCRIPT_DIR := $(COMPILE_DIR)
+
+SYSCOMPS :=
+DEVCOMPS :=
+LIBCOMPS :=
+HANDLERCOMPS :=
+APPS := $(shell find ${TOPDIR}/apps -maxdepth 1 -mindepth 1 -type d -printf "%f\n")
+APPCOMPS := ${APPS:%=apps/%}
+
+# include arch specific Makefile rules if any
+FILE_NAME := $(wildcard ${COMPILE_DIR}/arch_$(ARCH)/MakeVars)
+
+ifeq ($(VERBOSE),1)
+$(info FILE_NAME := $(FILE_NAME))
+endif
+
+ifneq ($(FILE_NAME), )
+	include $(FILE_NAME)
+else
+endif
+
+# see the final values
+ifeq ($(VERBOSE),1)
+$(info CROSS := $(CROSS))
+$(info CFLAGS := $(CFLAGS))
+$(info ASFLAGS := $(ASFLAGS))
+$(info LDFLAGS := $(LDFLAGS))
+$(info LINKER_SCRIPT_DIR := $(LINKER_SCRIPT_DIR))
+$(info SYSCOMPS := $(SYSCOMPS))
+$(info DEVCOMPS := $(DEVCOMPS))
+$(info LIBCOMPS := $(LIBCOMPS))
+$(info HANDLERCOMPS := $(HANDLERCOMPS))
+$(info APPCOMPS := $(APPCOMPS))
+endif
+
+# Important variables
+CC := ${CROSS}gcc
+AS := ${CROSS}as
+LD := ${CROSS}ld
+
+KERNEL_LINKER_SCRIPT := $(LINKER_SCRIPT_DIR)/kernel.ld
+
+COMPS := $(SYSCOMPS) $(DEVCOMPS) $(LIBCOMPS) $(HANDLERCOMPS) $(APPCOMPS)
+
+HDRDIRS := include/interfaces \
+	include/system \
+	include/devices \
+	include/libraries
+
+ifeq ($(VERBOSE),1)
+$(info CC := $(CC))
+$(info AS := $(AS))
+$(info LD := $(LD))
+$(info KERNEL_LINKER_SCRIPT := $(KERNEL_LINKER_SCRIPT))
+$(info COMPS := $(COMPS))
+$(info HDRDIRS := $(HDRDIRS))
+endif
+
+# these are needed for MakeTargets
+EMBEDDED_MODULES :=
+STANDALONE_MODULES :=
+MODULE_DSTDIRS :=
+
+ifeq ($(VERBOSE),1)
+$(info "================common makevars end====================")
+endif
+
+
+

@@ -1,0 +1,17 @@
+# lets clean, if any default target guessed by make
+.DEFAULT_GOAL :=
+
+ifeq ($(VERBOSE),1)
+$(info .DEFAULT_GOAL := $(.DEFAULT_GOAL))
+endif
+
+# Target
+apps: $(STANDALONE_MODULES)
+
+clean:
+	@rm -rf $(OBJDIR) $(COMPS:%=$(TOPDIR)/%/$(OBJDIR))
+	@if [ $$? -eq 0 ] ; then echo; echo "$$(tput setaf 2)All Clean!$$(tput sgr0)"; echo; fi
+
+install:
+	$(install_template)
+
